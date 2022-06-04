@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Product from "../views/Product.vue";
 import ProductDetail from "../views/ProductDetail.vue";
-import Login from "../views/Login.vue";
+// import Login from "../views/Login.vue";
 import Main from "../views/Main.vue";
 
 
@@ -25,11 +25,11 @@ const routes = [
     name: "Product-detail",
     component: ProductDetail,
   },
-  {
-    path: "/login",
-    name: "Login",
-    component: Login,
-  }
+  // {
+  //   path: "/login",
+  //   name: "Login",
+  //   component: Login,
+  // }
 ];
 
 ['push','replace'].forEach(method => {
