@@ -4,8 +4,6 @@ import Product from "../views/Product.vue";
 import ProductDetail from "../views/ProductDetail.vue";
 import Login from "../views/Login.vue";
 import Main from "../views/Main.vue";
-import ProductMobile from "../views/ProductMobile.vue";
-import ProductDetailMobile from "../views/ProductDetailMobile.vue";
 
 
 
@@ -31,27 +29,7 @@ const routes = [
     path: "/login",
     name: "Login",
     component: Login,
-  }, {
-    path: "/product-mobile",
-    name: "ProductMobile",
-    component: ProductMobile,
-  },
-  {
-    path: "/productDetailMobile",
-    name: "ProductDetailMobile",
-    component: ProductDetailMobile,
   }
-  // {
-  //   path: "/student",
-  //   name: "Student",
-  //   component: Student,
-  // },
-  // {
-  //   path: "/school",
-  //   name: "School",
-  //   component: School,
-  //   // component: () => import('../views/About.vue')
-  // },
 ];
 
 ['push','replace'].forEach(method => {
