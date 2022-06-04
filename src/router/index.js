@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Product from "../views/Product.vue";
 import ProductDetail from "../views/ProductDetail.vue";
 import Login from "../views/Login.vue";
+import Main from "../views/Main.vue";
 import ProductMobile from "../views/ProductMobile.vue";
 import ProductDetailMobile from "../views/ProductDetailMobile.vue";
 
@@ -11,6 +12,11 @@ import ProductDetailMobile from "../views/ProductDetailMobile.vue";
 Vue.use(VueRouter);
 
 const routes = [
+  {
+    path: "/main",
+    name: "Main",
+    component: Main,
+  },
   {
     path: "/product",
     name: "Product",

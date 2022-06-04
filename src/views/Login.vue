@@ -44,7 +44,7 @@
   export default {
     data: () => ({
       customer:{userName:"",password:""},
-      login:true
+      login:false
     }),
     methods:{
       async addCustomer(){

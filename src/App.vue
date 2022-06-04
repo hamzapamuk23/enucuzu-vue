@@ -1,32 +1,67 @@
 <template>
     <v-app class="mx-auto overflow-hidden" style="height: 100%;">
       <v-app-bar app clipped-left color="primary" style="width: 100%;" >
-          <v-autocomplete  @keyup.enter="goToFilterProduct()" v-model="selected" :loading="loading" :items="items" :search-input.sync="search" cache-items class="mx-4" flat rounded dark hide-no-data hide-details label="What do you want to buy cheap?" solo-inverted>
+          <v-toolbar-title style="color:white" class="ml-16" @click="goToMainMenu()">En Ucuzu</v-toolbar-title>
+          <div style="width:45%">
+          <v-autocomplete  @keyup.enter="goToFilterProduct()" v-model="selected" :loading="loading" :items="items" :search-input.sync="search" cache-items class="mx-4 ml-16" flat rounded dark hide-no-data hide-details label="What do you want to buy cheap?" solo-inverted>
           </v-autocomplete>
+          </div>
+          <v-spacer></v-spacer>
+          <div  class="mr-16" style="width:40%; text-align:right; display:inline-block;" >
+            <span style="cursor:pointer; color:white;"   >Hesap Aç</span>
+            <span style="cursor:pointer; color:white;"  class="ml-2 mr-5">Giriş Yap</span>
+            <v-icon  dark size="200%" right>person</v-icon>
+          </div>
       </v-app-bar>
       <v-main>
         <router-view></router-view>
-        <v-container v-if="main">
-            <v-layout>
-                <v-flex class="xs12 sm12 md12 lg12 ml-7">
-                    <v-card @click="goToProductDetail(index)" v-for="(product,index) in products" :key="product.id"  width="25%" class="mt-5 mx-2 elevation-3" style="display:inline-block; overflow:hidden; white-space: nowrap; text-overflow: ellipsis;" >
-                      <!-- <a :href="product.url" style="text-decoration:none; color:#1b1b1b; "> -->
-                        <v-img size="10px" :src="product.imageUrl"></v-img>
-                        <v-card-title class="pa-0" style=" font-size:10px; font-family:source_sans_proregular;">{{product.name}}</v-card-title>
-                        <v-divider></v-divider>
-                        <v-card-subtitle align="center" class="pa-2" style="font-size:50%"><strong>{{product.price}} TL ({{product.platformName}})</strong></v-card-subtitle>
-                      <!-- </a> -->
-                    </v-card>
-                </v-flex>
-            </v-layout>
-        </v-container>
-      </v-main>
+        <v-container v-if="show" style=" width:60%;  margin-top: 10%; justify-content: center; align-items: center; ">
+        <v-row class="mt-5 mx-2 elevation-5" align="center" style="background-color:#C5CAE9; border-radius: 5px;" >
+          <v-col cols="6" >
+              En Ucuzu Sitemize Hoşgeldin.
+          </v-col>
+          <v-col cols="6" style="border-left: 1px solid red" >
+            <v-form ref="form" lazy-validation>
+              <v-container grid-list-md pa-0>
+                  <v-layout row wrap>
+                      <v-flex class="xs12 sm12 md12 lg12" >
+                          <v-text-field v-model="customer.userName" hide-details dense outlined label="Kullanıcı Adı"></v-text-field>
+                      </v-flex>
+                      <v-flex class="xs12 sm12 md12 lg12" >
+                          <v-text-field type="password" v-model="customer.password" hide-details dense outlined label="Parola"></v-text-field>
+                      </v-flex>
+                      <v-flex v-if="login" @click="login=!login" class="xs12 sm12 md12 lg12" >
+                          <span style="cursor:pointer;">Kayıt Olmak için Tıklayınız...</span>
+                      </v-flex>
+                      <v-flex v-if="!login" @click="login=!login" class="xs12 sm12 md12 lg12" >
+                          <span style="cursor:pointer;">Üye İseniz Burdan Giriş Yapınız...</span>
+                      </v-flex>
+                      <v-flex v-if="login" class="xs4 sm4 md4 lg4 text-center">
+                          <v-btn @click="checkUser()" width="130px" color="success" >
+                              <v-icon left> send </v-icon>
+                              Giriş Yap
+                          </v-btn>
+                      </v-flex>
+                      <v-flex v-if="!login" class="xs4 sm4 md4 lg4 text-center">
+                          <v-btn @click="addCustomer()" width="130px" color="success" >
+                              <v-icon left> send </v-icon>
+                              Üye Ol
+                          </v-btn>
+                      </v-flex>
+                  </v-layout>
+              </v-container>
+          </v-form>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
   </v-app>
 </template>
 
 <script>
 export default {
   data: () => ({
+        show:true,
         search:null,
         loading: false,
         items: [],
@@ -34,13 +69,17 @@ export default {
         input:"",
         products:[],
         main:true,
-        states:[]}),
+        states:[],
+        customer:{userName:"",password:""},
+        login:false
+        }),
   watch: {
       search (val) {
         val && val !== this.selected && this.querySelections(val)
       },
     },
   mounted(){
+        if(localStorage.getItem('userName')==="" || localStorage.getItem('userName')===null) this.show=false
         this.getProduct()
     },
   methods:{
@@ -56,14 +95,12 @@ export default {
       });
     },
     goToFilterProduct(){
-      this.main=false
       localStorage.setItem('searchName',this.search)
-      this.$router.push({path:'/product-mobile'})
+      this.$router.push({path:'/product'})
       this.selected=""
     },
     goToProductDetail(index){
-      this.main=false
-      this.$router.push({path: "/ProductDetailMobile", query:{productId: this.products[index].id, main:false}})
+      this.$router.push({path: "/product-detail", query:{productId: this.products[index].id, }})
     },
     querySelections (v) {
         this.loading = true
@@ -73,11 +110,29 @@ export default {
           })
           this.loading = false
         }, 500)
+    },
+    async addCustomer(){
+        console.log(this.customer)
+        const response = await this.axios.post("http://localhost:8080/user/search/signIn" , this.customer)
+        console.log(response)
+    },
+      async checkUser(){
+        console.log(this.customer)
+        const response = await this.axios.get("http://localhost:8080/user/search/signUp?userName=" + this.customer.userName + "&password=" + this.customer.password)
+        
+        if(response.data){
+          this.show=false
+          localStorage.setItem('userName',this.customer.userName)
+          this.goToMain()
+        }
+        else{
+          alert('Kullanıcı Adı veya Şifre Yanlış!!!')
+        }
+        console.log(response.data)
+      },
+    goToMain(){
+      this.$router.push({path:'/main'})
     }
   }
 };
 </script>
-
-<style>
-
-</style>
