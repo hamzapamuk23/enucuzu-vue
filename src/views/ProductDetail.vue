@@ -9,7 +9,7 @@
                     </strong> (Trendyol)</v-card-subtitle>
             </v-card>
             <div max-width="35%" style=" margin-left: 10%; display:inline-block;">
-                <v-btn v-for="productOther in products" :key="productOther.id" style="display:block">{{productOther.platformName}}:<span>{{productOther.price}} TL</span></v-btn>
+                <v-btn class="mt-2" v-for="productOther in products" :key="productOther.id" :href="productOther.url" style="display:block">{{productOther.platformName}}:<span>{{productOther.price}} TL</span></v-btn>
             </div>
         </v-col>
         <v-col width="50%">
