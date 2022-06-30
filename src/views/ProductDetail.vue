@@ -1,7 +1,7 @@
 <template>
-    <v-row class="pa-0 mt-5 mx-2 elevation-3" width="100%" align="center">
-        <v-col width="50%" style="border-right:1px solid gray">
-            <v-card max-width="35%" class="elevation-3" style=" margin-left: 10%; display:inline-block">
+    <v-row class="pa-0 mt-5 mx-2 elevation-3" width="100%" >
+        <v-col width="50%">
+            <v-card width="25%" class="elevation-3" style=" margin-left: 10%; display:inline-block">
                 <v-img :src="product.imageUrl"></v-img>
                 <v-card-title class="pa-0  text-subtitle-1">{{product.name}}</v-card-title>
                 <v-divider class="mx-4"></v-divider>
@@ -9,10 +9,11 @@
                     </strong> (Trendyol)</v-card-subtitle>
             </v-card>
             <div max-width="35%" style=" margin-left: 10%; display:inline-block;">
-                <v-btn class="mt-2" v-for="productOther in products" :key="productOther.id" :href="productOther.url" style="display:block">{{productOther.platformName}}:<span>{{productOther.price}} TL</span></v-btn>
+                <v-btn class="mt-2" v-for="productOther in products" :key="productOther.id" :href="productOther.url"
+                    style="display:block">{{productOther.platformName}}:<span>{{productOther.price}} TL</span></v-btn>
             </div>
         </v-col>
-        <v-col width="50%">
+        <v-col width="50%" style="border-left:1px solid gray">
             <table>
                 <tr>
                     <th class="text-left">Teknik Özellikler:</th>
